@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *{
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background:url(./img/summer.jpg) no-repeat ;
+        background-size: cover;
+        text-align: center;
+        
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-image: inherit; /* 继承 .background 的背景图片 */
+          filter: brightness(0.5);
+          z-index: -1; /* 将叠加层置于背景之后 */
+        }
+      }
+
+      #game {
+        width: 75vw;
+        height: 80vh;
+        background: #666;
+        margin: auto;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -40%);
+      }
+
+      iframe {
+        width: 100%;
+        height: 100%;
+      }
+
+      #tab {
+        margin: 20px;
+      }
+
+      #tab span {
+        background-color: #666;
+        color: rgb(194, 253, 255);
+        width: 80px;
+        text-align: center;
+        display: inline-block;
+        height: 50px;
+        line-height: 50px;
+        border-radius: 15px;
+        margin-right: 10px;
+        margin-top: 10px;
+      }
+
+      p {
+        position: relative;
+        color: aliceblue;
+        top: -20px;
+        left: 0;
+        font-size: 24px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="tab">
+      <!-- <button id="startButton">开始游戏</button> -->
+      <a href="./aym.html" target="i">
+        <span>百鬼</span>
+      </a>
+
+      <a href="./fbk.html" target="i">
+        <span>FBK</span>
+      </a>
+
+      <a href="./zero.html" target="i">
+        <span> 零期生 </span>
+      </a>
+
+      <a href="./one.html" target="i">
+        <span> 一期生 </span>
+      </a>
+
+      <a href="./gamer.html" target="i">
+        <span> gamer </span>
+      </a>
+
+      <a href="./two.html" target="i">
+        <span> 二期生 </span>
+      </a>
+
+      <a href="./three.html" target="i">
+        <span> 三期生 </span>
+      </a>
+
+      <a href="./four.html" target="i">
+        <span> 四期生 </span>
+      </a>
+
+      <a href="./five.html" target="i">
+        <span> 五期生 </span>
+      </a>
+
+      <a href="./six.html" target="i">
+        <span> holoX </span>
+      </a>
+
+      <a href="./seven.html" target="i">
+        <span> ReGLOSS </span>
+      </a>
+    </div>
+
+    <div id="game">
+      <iframe src="./aym.html" frameborder="0" name="i"> </iframe>
+    </div>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.32/sweetalert2.all.min.js"
+      integrity="sha512-zB7yJLSASiSevQmWCrQaq+z/f5zRIa884hwWgmK1oI3MfolIzKcpDtyfBsrGqUi/hMCObVwr/+SZTByOqh0zkQ=="
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      function startTimer() {
+        let time = 0;
+        timer = setInterval(function () {
+          time++;
+          $('#text-time').text(time);
+          if (time === 60) {
+            clearInterval(timer);
+            Swal.fire({
+              icon: 'info',
+              title: '時間到',
+            });
+          }
+        }, 1000);
+      }
+
+      // iframe.contentDocument 或 iframe.contentWindow.documen  => 嘗試看看
+    </script>
+  </body>
+</html>

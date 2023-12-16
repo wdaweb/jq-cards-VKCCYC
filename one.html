@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        cursor: url(./img/aym/cur01.png) 20 15, auto;
+        background: url(./img/1/from1st_kv_sp.jpg) no-repeat;
+        background-size: cover;
+
+        height: 98vh;
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-image: inherit; /* 继承 .background 的背景图片 */
+          filter: brightness(0.5);
+          z-index: -1; /* 将叠加层置于背景之后 */
+        }
+      }
+
+      .card {
+        margin-left: 1rem;
+        margin-top: 1rem;
+        width: 120px;
+        height: 180px;
+        position: relative;
+        float: left;
+        transform-style: preserve-3d;
+        transition: transform 1s;
+
+        pointer-events: none;
+      }
+
+      .card-front {
+        width: 100%;
+        height: 100%;
+        background-image: url(./img/1/HOLO1_1.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        position: absolute;
+        /* transform: rotateY(180deg); */
+
+        backface-visibility: hidden;
+      }
+
+      .card-back {
+        width: 100%;
+        height: 100%;
+        background-image: url(./img/holo-card.gif);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        position: absolute;
+
+        transform: rotateY(180deg);
+        backface-visibility: hidden;
+      }
+
+      .card-close {
+        transform: rotateY(180deg);
+      }
+      #start {
+        width: 20vw;
+        color: rgb(248, 43, 43);
+        background-color: rgb(255, 255, 255);
+        font-size: 24px;
+        text-align: center;
+        display: inline-block;
+        position: relative;
+        left: 40vw;
+        top: 15px;
+
+        cursor: pointer;
+      }
+
+      #timecss {
+        color: aliceblue;
+        width: 20vw;
+
+        /* background-color: rgb(255, 255, 255); */
+        font-size: 24px;
+        text-align: center;
+        display: block;
+        position: relative;
+        left: 40vw;
+        top: 10px;
+
+        margin-top: 1.5rem;
+      }
+      #name,
+      #ftime {
+        margin-left: 10px;
+        color: aliceblue;
+        width: 25vw;
+        position: absolute;
+        font-size: 24px;
+        margin-top: 1rem;
+      }
+
+      #name {
+        left: 1rem;
+        top: 0;
+      }
+      #ftime {
+        left: 1rem;
+        top: 3rem;
+      }
+      #game {
+        margin: auto;
+        margin-top: 30px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <span id="start">開始遊戲</span>
+    <p id="timecss"><span id="time">0</span>秒</p>
+    <p id="name">最高分玩家: <span id="text-hsname">-</span></p>
+    <p id="ftime">最快秒數: <span id="text-hstime">0</span> 秒</p>
+    <div id="game"></div>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.32/sweetalert2.all.min.js"
+      integrity="sha512-zB7yJLSASiSevQmWCrQaq+z/f5zRIa884hwWgmK1oI3MfolIzKcpDtyfBsrGqUi/hMCObVwr/+SZTByOqh0zkQ=="
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      let time = 0;
+      let timer = 0;
+
+      //
+      const hs1 = {
+        name: '-',
+        time: 2010,
+      };
+
+      if (localStorage.hs1) {
+        const data = JSON.parse(localStorage.hs1);
+        hs1.name = data.name;
+        hs1.time = data.time;
+        $('#text-hsname').text(hs1.name);
+        $('#text-hstime').text(hs1.time);
+      }
+
+      //
+
+      $('#start').on('click', function () {
+        $('#start').attr('disabled', true);
+        $('.card').css('pointer-events', 'auto');
+        time = 0;
+        $('#text-time').text(time);
+
+        timer = setInterval(function () {
+          time++;
+          $('#time').text(time);
+        }, 1000);
+      });
+
+      for (let i = 0; i < 10; i++) {
+        $('#game').append(
+          `
+        <div class = " card card-close">
+          <div class="card-front"></div>
+          <div class="card-back"></div>
+          </div>
+          `
+        );
+      }
+
+      $('.card').each(function (index) {
+        const number = (index % 5) + 1;
+        console.log(index, number);
+        $(this)
+          .find('.card-front')
+          .css('background-image', `url(./img/1/HOLO1_${number}.png)`);
+        $(this).attr('data-number', number);
+      });
+
+      for (let i = 0; i < 20; i++) {
+        const randomA = Math.round(Math.random() * 15);
+        const randomB = Math.round(Math.random() * 15);
+        $('.card').eq(randomA).insertAfter($('.card').eq(randomB));
+      }
+
+      $('#game').on('click', '.card', function () {
+        if (
+          $('.card:not(.card-close)').length < 2 &&
+          $(this).hasClass('card-close') &&
+          !$(this).hasClass('card-ok')
+        ) {
+          $(this).removeClass('card-close');
+        }
+        if ($('.card:not(.card-close)').length === 2) {
+          if (
+            $('.card:not(.card-close)').eq(0).attr('data-number') ===
+            $('.card:not(.card-close)').eq(1).attr('data-number')
+          ) {
+            $('.card:not(.card-close)').addClass('card-ok');
+            $('.card:not(.card-close)').fadeTo(500, 0);
+          }
+          setTimeout(() => {
+            $('.card:not(.card-close)').addClass('card-close');
+
+            if ($('.card-ok').length === $('.card').length) {
+              clearInterval(timer);
+              $('#start').attr('disabled', false);
+              $('#game').html('');
+
+              //
+              if (time < hs1.time) {
+                Swal.fire({
+                  icon: 'success',
+                  title: '時間到',
+                  text: `最快速，你花 ${time} 秒`,
+                  // input 的 type
+                  input: 'text',
+                  inputAttributes: {
+                    required: true,
+                  },
+                  inputPlaceholder: '請輸入你的名字',
+                  validationMessage: '請輸入你的名字',
+                  allowOutsideClick: false,
+                  allowEscapeKey: false,
+                }).then(function (result) {
+                  hs1.time = time;
+                  hs1.name = result.value;
+                  $('#text-hsname').text(hs1.name);
+                  $('#text-hstime').text(hs1.time);
+                  localStorage.hs1 = JSON.stringify(hs1);
+                });
+              } else {
+                Swal.fire({
+                  icon: 'info',
+                  title: '時間到',
+                  text: `你花 ${time} 秒`,
+                });
+              }
+
+              //
+              for (let i = 0; i < 10; i++) {
+                $('#game').append(
+                  `
+                    <div class = " card card-close">
+                    <div class="card-front"></div>
+                    <div class="card-back"></div>
+                    </div>
+                  `
+                );
+
+                $('.card').each(function (index) {
+                  const number = (index % 5) + 1;
+                  console.log(index, number);
+                  $(this)
+                    .find('.card-front')
+                    .css(
+                      'background-image',
+                      `url(./img/1/HOLO1_${number}.png)`
+                    );
+                  $(this).attr('data-number', number);
+                });
+
+                for (let i = 0; i < 20; i++) {
+                  const randomA = Math.round(Math.random() * 15);
+                  const randomB = Math.round(Math.random() * 15);
+                  $('.card').eq(randomA).insertAfter($('.card').eq(randomB));
+                }
+              }
+            }
+          }, 800);
+        }
+      });
+    </script>
+  </body>
+</html>
